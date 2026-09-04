@@ -183,11 +183,20 @@ button:disabled, .btn:disabled { opacity: 0.55; cursor: not-allowed; }
   gap: 8px;
   margin: 10px 0 14px;
 }
-.split {
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 22px 0;
+.card.picked { border-color: #c9a27a; background: #fff8ef; }
+.pick { align-items: center; cursor: pointer; }
+.pick input { width: auto; margin-top: 4px; }
+.check-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+  font-weight: 700;
 }
+.check-all input { width: auto; }
 
 @media (max-width: 900px) {
   .layout, .topbar { grid-template-columns: 1fr; display: grid; }

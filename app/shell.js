@@ -21,6 +21,7 @@ export default function Shell({ user, children }) {
         </div>
         <div className="nav-links">
           <Link className="btn btn-ghost btn-small" href="/panel">Panel</Link>
+          <Link className="btn btn-ghost btn-small" href="/contactos">Contactos</Link>
           <Link className="btn btn-ghost btn-small" href="/configuracion">Configuración</Link>
           <button className="btn-ghost btn-small" type="button" onClick={logout}>Salir</button>
         </div>

@@ -6,7 +6,7 @@ import { composeMessage, getInstanceStatus, sendChatMessage, toInternational } f
 export async function POST(request) {
   try {
     const user = await requireUser();
-    const { contactId } = await request.json();
+    const { contactId, template: templateOverride } = await request.json();
     const settingsRows = await query(
       "SELECT ultramsg_instance, ultramsg_token, message_template FROM com_settings WHERE user_id = ? LIMIT 1",
       [user.id]
@@ -43,6 +43,9 @@ export async function POST(request) {
         [contact.type_id, user.id]
       );
       if (typeRows[0]?.template) template = typeRows[0].template;
+    }
+    if (templateOverride && String(templateOverride).trim()) {
+      template = String(templateOverride);
     }
 
     const body = composeMessage(template, contact, user.name);
