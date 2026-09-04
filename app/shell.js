@@ -15,11 +15,12 @@ export default function Shell({ user, children }) {
   return (
     <main className="app">
       <nav className="nav">
-        <div>
-          <p className="kicker">Cootravir C.T.A</p>
-          <strong>{user?.name}</strong>
+        <div className="brand">
+          <p className="kicker">Prisma Dev</p>
+          <span className="brand-name">Prisma Reach</span>
         </div>
         <div className="nav-links">
+          <span className="hint" style={{ margin: 0 }}>{user?.name}</span>
           <Link className="btn btn-ghost btn-small" href="/panel">Panel</Link>
           <Link className="btn btn-ghost btn-small" href="/contactos">Contactos</Link>
           <Link className="btn btn-ghost btn-small" href="/configuracion">Configuración</Link>

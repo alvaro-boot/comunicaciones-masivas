@@ -129,7 +129,7 @@ export default function ContactosApp({ user }) {
       <header className="topbar">
         <div>
           <h1>Contactos</h1>
-          <p className="subtitle">Crea tipos, agrégales variables y registra personas. El envío se hace en el Panel.</p>
+          <p className="subtitle">Tipos, variables y personas. El envío vive en el Panel.</p>
         </div>
       </header>
 

@@ -158,8 +158,8 @@ export default function PanelApp({ user }) {
     <Shell user={user}>
       <header className="topbar">
         <div>
-          <h1>Panel de envíos</h1>
-          <p className="subtitle">Filtra por tipo, ajusta la plantilla y elige a quién escribir.</p>
+          <h1>Panel</h1>
+          <p className="subtitle">Elige un tipo, ajusta el mensaje y dispara el envío.</p>
         </div>
         <aside className={`status-card ${ready ? "connected" : "disconnected"}`}>
           <div className="status-dot" />

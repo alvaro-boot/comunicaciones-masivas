@@ -32,10 +32,12 @@ export default function AuthForm({ mode }) {
 
   return (
     <main className="app auth-wrap">
-      <p className="kicker">Cootravir C.T.A</p>
-      <h1>{isRegister ? "Crear cuenta" : "Entrar"}</h1>
+      <p className="kicker">Prisma Dev</p>
+      <h1>{isRegister ? "Crear cuenta" : "Prisma Reach"}</h1>
       <p className="subtitle">
-        Cada usuario tiene sus contactos y sus propias claves de UltraMsg.
+        {isRegister
+          ? "Tu espacio de comunicaciones: contactos, tipos y envíos."
+          : "Comunicaciones de Prisma Dev. Entra para enviar."}
       </p>
       <form className="panel field-grid" onSubmit={onSubmit}>
         {isRegister && (
