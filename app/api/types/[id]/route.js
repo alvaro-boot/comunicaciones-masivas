@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { query } from "@/lib/db";
-import { fieldKey } from "@/lib/fields";
+import { safeFieldKey } from "@/lib/fields";
 import { getUserType } from "@/lib/types";
 
 export async function PUT(request, { params }) {
@@ -28,9 +28,9 @@ export async function PUT(request, { params }) {
       for (let i = 0; i < body.fields.length; i += 1) {
         const label = String(body.fields[i].label || "").trim();
         if (!label) continue;
-        const key = fieldKey(body.fields[i].key || label);
+        const key = safeFieldKey(label, body.fields[i].key);
         await query(
-          "INSERT INTO com_type_fields (type_id, field_key, label, sort_order) VALUES (?, ?, ?, ?)",
+          "INSERT INTO com_type_fields (type_id, field_key, label, sort_order) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE label = VALUES(label), sort_order = VALUES(sort_order)",
           [id, key, label, i]
         );
       }

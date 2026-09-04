@@ -64,7 +64,7 @@ export default function SettingsApp({ user }) {
   return (
     <Shell user={user}>
       <h1>Configuración</h1>
-      <p className="subtitle">Tus claves de UltraMsg quedan ligadas solo a tu usuario.</p>
+      <p className="subtitle">Tus claves de UltraMsg. La plantilla de cada tipo de contacto se edita en el Panel.</p>
 
       <div className="layout" style={{ marginTop: 24 }}>
         <section className="panel">

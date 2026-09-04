@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { query } from "@/lib/db";
-import { fieldKey } from "@/lib/fields";
+import { safeFieldKey } from "@/lib/fields";
 import { ensureDefaultType, getTypeFields } from "@/lib/types";
 import { DEFAULT_TEMPLATE } from "@/lib/ultramsg";
 
@@ -39,7 +39,7 @@ export async function POST(request) {
     for (let i = 0; i < fields.length; i += 1) {
       const label = String(fields[i].label || fields[i].key || "").trim();
       if (!label) continue;
-      const key = fieldKey(fields[i].key || label);
+      const key = safeFieldKey(label, fields[i].key);
       await query(
         "INSERT INTO com_type_fields (type_id, field_key, label, sort_order) VALUES (?, ?, ?, ?)",
         [created.insertId, key, label, i]

@@ -19,10 +19,12 @@ CREATE TABLE IF NOT EXISTS com_settings (
 CREATE TABLE IF NOT EXISTS com_contacts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
+  type_id INT NULL,
   conjunto VARCHAR(255) NOT NULL,
   nombre VARCHAR(190) NOT NULL,
   saludo VARCHAR(120) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
+  extras TEXT NULL,
   sent TINYINT(1) NOT NULL DEFAULT 0,
   sent_at DATETIME NULL,
   last_error TEXT NULL,
