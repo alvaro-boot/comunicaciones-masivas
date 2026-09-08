@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import Shell from "../shell";
 import { displayTitle } from "@/lib/fields";
 
@@ -207,7 +208,10 @@ export default function ContactosApp({ user }) {
                     <h3 className="conjunto">{displayTitle(contact)}</h3>
                     <p className="meta">{contact.nombre} · <span className="phone">+57 {contact.telefono}</span></p>
                   </div>
-                  <button className="btn-danger btn-small" type="button" onClick={() => removeContact(contact.id)}>Eliminar</button>
+                  <div className="card-actions">
+                    <Link className="btn btn-ghost btn-small" href={`/seguimiento?contacto=${contact.id}`}>Seguimiento</Link>
+                    <button className="btn-danger btn-small" type="button" onClick={() => removeContact(contact.id)}>Eliminar</button>
+                  </div>
                 </div>
               </article>
             ))}

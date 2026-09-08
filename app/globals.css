@@ -216,6 +216,15 @@ button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 }
 .check-all input { width: auto; accent-color: var(--indigo); }
 
+.pick-card {
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  gap: 6px;
+}
+.timeline { display: grid; gap: 12px; margin-top: 12px; }
+.timeline-item { padding-bottom: 4px; }
+
 @media (max-width: 900px) {
   .layout, .topbar { grid-template-columns: 1fr; display: grid; }
   .panel.sticky { position: static; }
