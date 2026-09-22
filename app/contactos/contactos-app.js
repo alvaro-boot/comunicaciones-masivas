@@ -18,6 +18,7 @@ export default function ContactosApp({ user }) {
   const [newTypeName, setNewTypeName] = useState("");
   const [newField, setNewField] = useState("");
   const [form, setForm] = useState({ nombre: "", saludo: "", telefono: "", extras: {} });
+  const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
   const [ok, setOk] = useState("");
 
@@ -43,7 +44,7 @@ export default function ContactosApp({ user }) {
   }, []);
 
   useEffect(() => {
-    if (!selected) return;
+    if (!selected || editingId) return;
     setForm((prev) => ({ ...prev, extras: emptyExtras(selected.fields) }));
   }, [typeId]);
 
@@ -97,20 +98,44 @@ export default function ContactosApp({ user }) {
     await load();
   }
 
-  async function addContact(event) {
+  async function saveContact(event) {
     event.preventDefault();
     setError("");
     setOk("");
-    const response = await fetch("/api/contacts", {
-      method: "POST",
+    const payload = { ...form, typeId };
+    const response = await fetch(editingId ? `/api/contacts/${editingId}` : "/api/contacts", {
+      method: editingId ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, typeId }),
+      body: JSON.stringify(payload),
     });
     const data = await response.json();
     if (!response.ok) return setError(data.error);
+    const wasEditing = Boolean(editingId);
     setForm({ nombre: "", saludo: "", telefono: "", extras: emptyExtras(selected?.fields) });
-    setOk("Contacto guardado.");
+    setEditingId(null);
+    setOk(wasEditing ? "Contacto actualizado." : "Contacto guardado.");
     await load(typeId);
+  }
+
+  function startEdit(contact) {
+    const type = types.find((item) => String(item.id) === String(contact.type_id));
+    setTypeId(String(contact.type_id || typeId));
+    setEditingId(contact.id);
+    setError("");
+    setOk("");
+    setForm({
+      nombre: contact.nombre || "",
+      saludo: contact.saludo || "",
+      telefono: contact.telefono || "",
+      extras: { ...emptyExtras(type?.fields || selected?.fields), ...(contact.extras || {}) },
+    });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setForm({ nombre: "", saludo: "", telefono: "", extras: emptyExtras(selected?.fields) });
+    setOk("");
+    setError("");
   }
 
   async function importSeed() {
@@ -169,9 +194,13 @@ export default function ContactosApp({ user }) {
         </section>
 
         <section className="panel">
-          <h2>3. Contacto</h2>
-          <p className="hint">Se guarda en el tipo “{selected?.name || "…"}”.</p>
-          <form onSubmit={addContact}>
+          <h2>3. {editingId ? "Editar contacto" : "Contacto"}</h2>
+          <p className="hint">
+            {editingId
+              ? `Estás editando un contacto del tipo “${selected?.name || "…"}”.`
+              : `Se guarda en el tipo “${selected?.name || "…"}”.`}
+          </p>
+          <form onSubmit={saveContact}>
             {(selected?.fields || []).map((field) => (
               <div key={field.field_key}>
                 <label>{field.label}</label>
@@ -193,7 +222,12 @@ export default function ContactosApp({ user }) {
             {error && <p className="error-text">{error}</p>}
             {ok && <p className="hint">{ok}</p>}
             <div className="actions" style={{ marginTop: 16 }}>
-              <button className="btn-primary" type="submit">Guardar</button>
+              <button className="btn-primary" type="submit">
+                {editingId ? "Guardar cambios" : "Guardar"}
+              </button>
+              {editingId && (
+                <button className="btn-ghost" type="button" onClick={cancelEdit}>Cancelar</button>
+              )}
               <button className="btn-ghost" type="button" onClick={importSeed}>Lista Cootravir</button>
             </div>
           </form>
@@ -202,13 +236,14 @@ export default function ContactosApp({ user }) {
           <div className="list">
             {!ofType.length && <div className="empty">Todavía no hay contactos aquí.</div>}
             {ofType.map((contact) => (
-              <article key={contact.id} className="card">
+              <article key={contact.id} className={`card ${editingId === contact.id ? "picked" : ""}`}>
                 <div className="card-head">
                   <div>
                     <h3 className="conjunto">{displayTitle(contact)}</h3>
                     <p className="meta">{contact.nombre} · <span className="phone">+57 {contact.telefono}</span></p>
                   </div>
                   <div className="card-actions">
+                    <button className="btn-ghost btn-small" type="button" onClick={() => startEdit(contact)}>Editar</button>
                     <Link className="btn btn-ghost btn-small" href={`/seguimiento?contacto=${contact.id}`}>Seguimiento</Link>
                     <button className="btn-danger btn-small" type="button" onClick={() => removeContact(contact.id)}>Eliminar</button>
                   </div>
